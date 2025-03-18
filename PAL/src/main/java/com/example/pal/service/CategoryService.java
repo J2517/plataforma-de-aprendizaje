@@ -1,18 +1,16 @@
 package com.example.pal.service;
 
-import com.example.pal.dto.CategoryDTO;
-import com.example.pal.dto.UserDTO;
-import com.example.pal.model.Category;
-import com.example.pal.repository.CategoryRepository;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.pal.dto.CategoryDTO;
+import com.example.pal.model.Category;
+import com.example.pal.repository.CategoryRepository;
 
 @Service
 public class CategoryService {

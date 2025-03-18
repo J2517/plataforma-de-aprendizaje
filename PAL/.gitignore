@@ -33,6 +33,7 @@ out/
 /nbdist/
 /.nb-gradle/
 /application.properties/
+/mediafiles/
 
 ### VS Code ###
 .vscode/

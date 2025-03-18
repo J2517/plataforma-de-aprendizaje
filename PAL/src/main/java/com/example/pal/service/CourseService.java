@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.example.pal.dto.CourseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.pal.model.Course;
+import com.example.pal.dto.CourseDTO;
 import com.example.pal.model.Category;
+import com.example.pal.model.Course;
 import com.example.pal.model.User;
 import com.example.pal.repository.CategoryRepository;
 import com.example.pal.repository.CourseRepository;

@@ -1,5 +1,9 @@
     package com.example.pal.model;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,4 +34,7 @@ public class Course {
     @JoinColumn(name = "instructor_id", nullable = false)
     private User instructor;
 
+    @ManyToMany(mappedBy = "courses", fetch=FetchType.LAZY)
+    @JsonIgnore
+    private Set<Content> contents;
 }
