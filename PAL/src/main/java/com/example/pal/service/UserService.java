@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.pal.dto.CreateUserDTO;
 import com.example.pal.dto.UserDTO;
+import com.example.pal.dto.UpdateUserDTO;
 import com.example.pal.model.Role;
 import com.example.pal.model.User;
 import com.example.pal.repository.RoleRepository;
@@ -63,15 +64,26 @@ public class UserService {
     public Optional<User> getUserById(Long id){
     	return userRepository.findById(id);
     }
-    
-    public User updateUser(Long id, User userDetails) {
-    	User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found!"));
-    	user.setUsername(userDetails.getUsername());
-    	if(user.getPassword()!=null) {
-    		user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-    	}
-    	user.setRoles(userDetails.getRoles());
-    	return userRepository.save(user);
+
+    public User updateUser(Long id, UpdateUserDTO userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        if (userDetails.getUsername() != null) {
+            user.setUsername(userDetails.getUsername());
+        }
+
+        // Convertir roles de String[] a Set<Role>
+        /*
+        if (userDetails.getRoles() != null) {
+            Set<Role> roles = Arrays.stream(userDetails.getRoles())
+                    .map(roleName -> roleRepository.findByName(roleName)
+                            .orElseThrow(() -> new RuntimeException("Role not found: " + roleName)))
+                    .collect(Collectors.toSet());
+            user.setRoles(roles);
+        }*/
+
+        return userRepository.save(user);
     }
     
     public void deleteUser(Long id) {
