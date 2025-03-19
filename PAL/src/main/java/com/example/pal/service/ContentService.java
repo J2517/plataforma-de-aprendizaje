@@ -2,6 +2,7 @@ package com.example.pal.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -79,9 +80,8 @@ public class ContentService {
                 .collect(Collectors.toList());
     }
 
-    public Content getContentById(Long id) {
-        return contentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Content not found with ID: " + id));
+    public Optional<Content> getContentById(Long id) {
+        return contentRepository.findById(id);
     }
 
     public Content updateContent(Long id, CreateContentDTO updateContentDTO) {
@@ -90,7 +90,6 @@ public class ContentService {
         
         content.setType(updateContentDTO.getType());
         
-        // Actualizar cursos
         if (updateContentDTO.getCourses() != null) {
             Set<Course> courses = new HashSet<>();
             for (String courseId : updateContentDTO.getCourses()) {
