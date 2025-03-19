@@ -60,17 +60,21 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        Category category = categoryRepository.findById(courseDTO.getCategory_id())
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        if (courseDTO.getTitle() != null) course.setTitle(courseDTO.getTitle());
+        if (courseDTO.getDescription() != null) course.setDescription(courseDTO.getDescription());
+        if (courseDTO.getPrice() > 0) course.setPrice(courseDTO.getPrice());
 
-        User instructor = userRepository.findById(courseDTO.getInstructor_id())
-                .orElseThrow(() -> new RuntimeException("Instructor no encontrado"));
+        if (courseDTO.getCategory_id() != null) {
+            Category category = categoryRepository.findById(courseDTO.getCategory_id())
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+            course.setCategory(category);
+        }
 
-        course.setTitle(courseDTO.getTitle());
-        course.setDescription(courseDTO.getDescription());
-        course.setPrice(courseDTO.getPrice());
-        course.setCategory(category);
-        course.setInstructor(instructor);
+        if (courseDTO.getInstructor_id() != null) {
+            User instructor = userRepository.findById(courseDTO.getInstructor_id())
+                    .orElseThrow(() -> new RuntimeException("Instructor no encontrado"));
+            course.setInstructor(instructor);
+        }
 
         return courseRepository.save(course);
     }
