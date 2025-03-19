@@ -8,4 +8,5 @@ import com.example.pal.model.File;
 @Repository
 public interface FileRepository extends JpaRepository<File, Long> {
     File findById(long id);
+    File findByFileUrl(String fileUrl);
 }

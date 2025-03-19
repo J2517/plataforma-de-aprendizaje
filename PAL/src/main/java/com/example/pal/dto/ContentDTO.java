@@ -1,7 +1,6 @@
 package com.example.pal.dto;
 
-
-import java.util.List;
+import java.util.Set;
 
 import com.example.pal.enums.ContentType;
 
@@ -11,6 +10,6 @@ import lombok.Data;
 public class ContentDTO {
     private Long id;
     private ContentType type;
-    private List<Long> courses;
-    private String[] files;
+    private Set<CourseDTO> courses;
+    private Set<FileDTO> files;
 }

@@ -15,7 +15,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.pal.model.Content;
 import com.example.pal.model.File;
 import com.example.pal.repository.ContentRepository;
 import com.example.pal.repository.FileRepository;
@@ -24,7 +23,6 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 public class FileSystemStorageService implements StorageService {
-
 
     @Value("${media.location}")
     private String mediaLocation;
@@ -52,35 +50,21 @@ public class FileSystemStorageService implements StorageService {
         if (multipartFile.isEmpty()) {
             throw new RuntimeException("Failed to store empty file " + multipartFile.getOriginalFilename());
         }
-    
+
         String filename = multipartFile.getOriginalFilename();
-        if (filename == null || filename.isBlank()) {
-            throw new RuntimeException("Invalid file name");
-        }
-    
-        // Generar un nombre de archivo único para evitar colisiones
-        String uniqueFilename = System.currentTimeMillis() + "_" + filename;
-        
-        Path destinationFile = rootLocation.resolve(Paths.get(uniqueFilename)).normalize().toAbsolutePath();
-    
+
+        Path destinationFile = rootLocation.resolve(Paths.get(filename)).normalize().toAbsolutePath();
+
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
-            
-            // Crear la URL del archivo
-            String fileUrl = "/media/" + uniqueFilename;
-            
-            // Recuperar el objeto Content por su ID
-            Content content = contentRepository.findById(contentId)
-                .orElseThrow(() -> new RuntimeException("Content not found with id: " + contentId));
-            
+
             // Crear y guardar el objeto File
             File file = new File();
-            file.setFileUrl(fileUrl);
-            file.setContent(content);
-            
+
+            // Guardar en la base de datos (el `file_url` se generará automáticamente en `@PrePersist`)
             fileRepository.save(file);
-            
-            return fileUrl;
+
+            return file.getFileUrl();
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file " + filename, e);
         }
@@ -99,6 +83,31 @@ public class FileSystemStorageService implements StorageService {
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException("Failed to read file " + filename, e);
+        }
+    }
+    @Override
+    public File findById(Long fileId) {
+        return fileRepository.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found with id: " + fileId));
+    }
+
+    @Override
+    public void delete(Long fileId) {
+        File file = findById(fileId);
+        
+        try {
+            // Obtener el nombre del archivo desde la URL
+            String fileUrl = file.getFileUrl();
+            String filename = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+            
+            // Eliminar el archivo físico
+            Path filePath = rootLocation.resolve(filename);
+            Files.deleteIfExists(filePath);
+            
+            // Eliminar el registro de la base de datos
+            fileRepository.delete(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file with id: " + fileId, e);
         }
     }
 }

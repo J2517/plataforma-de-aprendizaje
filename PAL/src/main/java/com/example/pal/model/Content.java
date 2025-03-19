@@ -30,7 +30,13 @@ public class Content {
     @JsonIgnore
     private Set<Course> courses;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "content")
-    List<File> files;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "content_files",
+        joinColumns = @JoinColumn(name = "content_id"),
+        inverseJoinColumns = @JoinColumn(name = "file_id")
+    )
+    @JsonIgnore
+    private Set<File> files;
 
 }

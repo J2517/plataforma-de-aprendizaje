@@ -7,5 +7,5 @@ import com.example.pal.model.Content;
 
 @Repository
 public interface ContentRepository extends JpaRepository<Content, Long> {
-    
+    Content findById(long id);
 }
