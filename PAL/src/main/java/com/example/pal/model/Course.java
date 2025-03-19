@@ -31,6 +31,7 @@ public class Course {
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "instructor_id", nullable = false)
     private User instructor;
 

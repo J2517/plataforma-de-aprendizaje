@@ -27,7 +27,7 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping("/create")
-    public ResponseEntity<Course> createCourse(@ModelAttribute CourseDTO courseDTO) {
+    public ResponseEntity<Course> createCourse(@RequestBody CourseDTO courseDTO) {
         Course course = courseService.createCourse(courseDTO);
         return ResponseEntity.status(201).body(course);
     }

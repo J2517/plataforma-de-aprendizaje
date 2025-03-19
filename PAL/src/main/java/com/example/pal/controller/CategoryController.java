@@ -27,7 +27,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/create")
-    public ResponseEntity<Category> createCategory(@ModelAttribute CategoryDTO categoryDTO){
+    public ResponseEntity<Category> createCategory(@RequestBody CategoryDTO categoryDTO){
         Category category = categoryService.createCategory(categoryDTO);
         System.out.println(category.getName());
         return ResponseEntity.status(201).body(category);
