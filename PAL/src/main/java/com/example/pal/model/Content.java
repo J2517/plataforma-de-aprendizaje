@@ -1,5 +1,6 @@
 package com.example.pal.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.example.pal.enums.ContentType;
@@ -40,7 +41,7 @@ public class Content {
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
 
-    private Set<Course> courses;
+    private Set<Course> courses = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore

@@ -1,5 +1,6 @@
-    package com.example.pal.model;
+package com.example.pal.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +16,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
-
 
 @Data
 @Entity
@@ -45,7 +45,24 @@ public class Course {
     @JoinColumn(name = "instructor_id", nullable = false)
     private User instructor;
 
-    @ManyToMany(mappedBy = "courses", fetch=FetchType.LAZY)
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Content> contents;
+    private Set<Content> contents = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Course)) {
+            return false;
+        }
+        Course course = (Course) o;
+        return id != null && id.equals(course.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }
