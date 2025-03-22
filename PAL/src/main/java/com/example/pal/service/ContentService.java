@@ -35,44 +35,6 @@ public class ContentService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // public Content createContent(CreateContentDTO createContentDTO) {
-    //     Content content = new Content();
-    //     content.setType(createContentDTO.getType());
-        
-    //     // Procesar cursos
-    //     Set<Course> courses = new HashSet<>();
-    //     if (createContentDTO.getCourses() != null) {
-    //         for (String courseId : createContentDTO.getCourses()) {
-    //             try {
-    //                 Long id = Long.parseLong(courseId);
-    //                 Course course = courseRepository.findById(id)
-    //                         .orElseThrow(() -> new RuntimeException("Course not found with ID: " + id));
-    //                 courses.add(course);
-    //             } catch (NumberFormatException e) {
-    //                 throw new RuntimeException("Invalid course ID format: " + courseId);
-    //             }
-    //         }
-    //     }
-    //     content.setCourses(courses);
-        
-    //     // Procesar archivos
-    //     Set<File> files = new HashSet<>();
-    //     if (createContentDTO.getFiles() != null) {
-    //         for (String fileId : createContentDTO.getFiles()) {
-    //             try {
-    //                 Long id = Long.parseLong(fileId);
-    //                 File file = fileRepository.findById(id)
-    //                         .orElseThrow(() -> new RuntimeException("File not found with ID: " + id));
-    //                 files.add(file);
-    //             } catch (NumberFormatException e) {
-    //                 throw new RuntimeException("Invalid file ID format: " + fileId);
-    //             }
-    //         }
-    //     }
-    //     content.setFiles(files);
-        
-    //     return contentRepository.save(content);
-    // }
     public Content createContent(CreateContentDTO createContentDTO) {
         Content content = new Content();
         content.setType(createContentDTO.getType());
