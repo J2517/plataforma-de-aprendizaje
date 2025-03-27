@@ -64,14 +64,14 @@ public class CourseService {
         if (courseDTO.getDescription() != null) course.setDescription(courseDTO.getDescription());
         if (courseDTO.getPrice() > 0) course.setPrice(courseDTO.getPrice());
 
-        if (courseDTO.getCategory_id() != null) {
-            Category category = categoryRepository.findById(courseDTO.getCategory_id())
+        if (courseDTO.getCategoryId() != null) {
+            Category category = categoryRepository.findById(courseDTO.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
             course.setCategory(category);
         }
 
-        if (courseDTO.getInstructor_id() != null) {
-            User instructor = userRepository.findById(courseDTO.getInstructor_id())
+        if (courseDTO.getInstructorId() != null) {
+            User instructor = userRepository.findById(courseDTO.getInstructorId())
                     .orElseThrow(() -> new RuntimeException("Instructor no encontrado"));
             course.setInstructor(instructor);
         }
