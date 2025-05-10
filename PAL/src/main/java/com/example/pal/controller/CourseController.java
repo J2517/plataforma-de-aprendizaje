@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pal.dto.CourseDTO;
@@ -31,9 +32,8 @@ public class CourseController {
         return ResponseEntity.status(201).body(course);
     }
 
-
     @GetMapping("/all")
-    public ResponseEntity<List<CourseDTO>> getAllCourses(){
+    public ResponseEntity<List<CourseDTO>> getAllCourses() {
         return ResponseEntity.ok(courseService.getAllCourses());
     }
 
@@ -54,4 +54,24 @@ public class CourseController {
         courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/free")
+    public ResponseEntity<List<Course>> getFreeCourses() {
+        List<Course> freeCourses = courseService.getFreeCourses();
+        if (freeCourses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(freeCourses);
+    }
+
+    @GetMapping("/by-category")
+    public ResponseEntity<List<Course>> getCoursesByCategoryName(@RequestParam("categoryName") String categoryName) {
+        List<Course> courses = courseService.getCoursesByCategoryName(categoryName);
+        if (courses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(courses);
+    }
+    
+
 }

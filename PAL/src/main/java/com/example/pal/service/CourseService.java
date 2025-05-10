@@ -32,21 +32,28 @@ public class CourseService {
     private ModelMapper modelMapper;
 
     public Course createCourse(CourseDTO courseDTO) {
-        Category category = categoryRepository.findById(courseDTO.getCategory_id())
+        if (courseDTO.getCategoryId() == null) {
+            throw new IllegalArgumentException("El ID de la categoría no puede ser nulo");
+        }
+        if (courseDTO.getInstructorId() == null) {
+            throw new IllegalArgumentException("El ID del instructor no puede ser nulo");
+        }
+    
+        Category category = categoryRepository.findById(courseDTO.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        User instructor = userRepository.findById(courseDTO.getInstructor_id())
+        User instructor = userRepository.findById(courseDTO.getInstructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor no encontrado"));
-
+    
         Course course = new Course();
         course.setTitle(courseDTO.getTitle());
         course.setDescription(courseDTO.getDescription());
         course.setPrice(courseDTO.getPrice());
         course.setCategory(category);
         course.setInstructor(instructor);
-
+    
         return courseRepository.save(course);
     }
-
+    
     public List<CourseDTO> getAllCourses() {
         List<Course> courses = courseRepository.findAll();
         return courses.stream().map(course -> modelMapper.map(course, CourseDTO.class)).collect(Collectors.toList());
@@ -82,5 +89,14 @@ public class CourseService {
     public void deleteCourse(Long id) {
         courseRepository.deleteById(id);
     }
+
+    public List<Course> getFreeCourses() {
+        return courseRepository.findFreeCourses();
+    }
+
+    public List<Course> getCoursesByCategoryName(String categoryName) {
+        return courseRepository.findByCategoryName(categoryName);
+    }
+    
 
 }

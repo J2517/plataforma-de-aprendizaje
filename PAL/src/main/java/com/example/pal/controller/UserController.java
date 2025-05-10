@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pal.dto.CreateUserDTO;
@@ -57,4 +58,13 @@ public class UserController {
     	userService.deleteUser(id);
     	return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/by-role")
+    public ResponseEntity<List<User>> getUsersByRole(@RequestParam("roleName") String roleName) {
+    	List<User> users = userService.getUsersByRole(roleName);
+    	if (users.isEmpty()) {
+            return ResponseEntity.noContent().build(); 
+        }
+        return ResponseEntity.ok(users);
+    }    
 }

@@ -6,6 +6,8 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -22,7 +24,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-
+    
+    @NotNull(message="El usuario debe tener al menos un rol")
+    @Size(min=1,message="El usuario debe tener al menos un rol")
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "user_roles",

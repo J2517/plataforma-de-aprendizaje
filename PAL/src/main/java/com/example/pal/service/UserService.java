@@ -34,25 +34,26 @@ public class UserService {
     @Autowired //instancia de modelMapper
     private ModelMapper modelMapper;
 
-    public User createUserWithRoles(CreateUserDTO userDTO) { //Usa el DTO como argumento en lugar de un request 
+    public User createUserWithRoles(CreateUserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         Set<Role> roles = new HashSet<>();
         for (String roleName : userDTO.getRoles()) {
-            Optional<Role> roleOpt = roleRepository.findByName(roleName);
-            Role role = roleOpt.orElseGet(() -> {
-                Role newRole = new Role();
-                newRole.setName(roleName);
-                return roleRepository.save(newRole);
-            });
+            String normalizedRoleName = roleName.trim().toLowerCase(); // Normaliza el nombre del rol
+            Role role = roleRepository.findByName(normalizedRoleName)
+                    .orElseGet(() -> {
+                        Role newRole = new Role();
+                        newRole.setName(normalizedRoleName); // Asigna un String simple
+                        return roleRepository.save(newRole);
+                    });
             roles.add(role);
         }
 
         user.setRoles(roles);
         return userRepository.save(user);
-    }
+    } 
 
     
     public List<UserDTO> getAllUsers() {
@@ -88,5 +89,8 @@ public class UserService {
     
     public void deleteUser(Long id) {
     	userRepository.deleteById(id);
+    }
+    public List<User> getUsersByRole(String roleName) {
+        return userRepository.findUsersByRole(roleName);
     }
 }

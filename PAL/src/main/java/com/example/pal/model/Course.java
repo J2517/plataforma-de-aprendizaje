@@ -15,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
@@ -26,12 +28,14 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)
     private String description;
-
+    
+    @PositiveOrZero(message = "El precio no puede ser negativo")
     @Column(nullable = false)
     private int price;
 

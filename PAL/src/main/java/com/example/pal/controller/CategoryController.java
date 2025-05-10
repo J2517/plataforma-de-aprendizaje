@@ -54,4 +54,11 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Category> getCategoryByName(@PathVariable("name") String name){
+        Optional<Category> category = categoryService.getCategoryByName(name);
+        return category.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+    }
+
 }
