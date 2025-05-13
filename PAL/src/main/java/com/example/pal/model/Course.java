@@ -1,6 +1,7 @@
 package com.example.pal.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,8 +15,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
@@ -52,6 +53,9 @@ public class Course {
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Content> contents = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    List<Enrollment> enrollments;
 
     @Override
     public boolean equals(Object o) {

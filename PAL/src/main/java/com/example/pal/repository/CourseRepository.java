@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.example.pal.model.Course;
 
 @Repository
-public interface  CourseRepository extends JpaRepository<Course, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
+
     Course findById(long id);
 
     //Cursos gratuitos
@@ -18,7 +19,7 @@ public interface  CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findFreeCourses();
 
     //Cursos por id de categoría
-@Query("SELECT c FROM Course c WHERE c.category.name = :categoryName")
-List<Course> findByCategoryName(@Param("categoryName") String categoryName);
+    @Query("SELECT c FROM Course c WHERE c.category.name = :categoryName")
+    List<Course> findByCategoryName(@Param("categoryName") String categoryName);
 
 }
