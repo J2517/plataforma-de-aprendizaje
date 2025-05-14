@@ -55,7 +55,12 @@ public class Course {
     private Set<Content> contents = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @JsonIgnore
     List<Enrollment> enrollments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @JsonIgnore
+    List<Payment> payments;
 
     @Override
     public boolean equals(Object o) {
