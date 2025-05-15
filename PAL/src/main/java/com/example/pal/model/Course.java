@@ -1,5 +1,6 @@
 package com.example.pal.model;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
@@ -39,6 +43,18 @@ public class Course {
     @PositiveOrZero(message = "El precio no puede ser negativo")
     @Column(nullable = false)
     private int price;
+
+    @Pattern(regexp="básico|intermedio|avanzado",message="El nivel debe ser 'básico', 'intermedio' o 'avanzado'")
+    @Column(nullable = false)
+    private String level;
+
+    @Min(value = 0, message = "La nota no puede ser negativa")
+    @Max(value = 5, message = "La nota no puede ser mayor a 5")
+    @Column(nullable = false)
+    private Double note;
+
+    @Column(nullable = false)
+    private LocalDate createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore

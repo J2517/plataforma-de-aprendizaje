@@ -22,4 +22,32 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c FROM Course c WHERE c.category.name = :categoryName")
     List<Course> findByCategoryName(@Param("categoryName") String categoryName);
 
+// Ordenar por fecha (createdAt descendente)
+    @Query("SELECT c FROM Course c WHERE "
+            + "(:keyword IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "
+            + "   OR LOWER(c.description) LIKE LOWER(CONCAT('%', :keyword, '%')) "
+            + "   OR LOWER(c.category.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND "
+            + "(:isFree IS NULL OR (:isFree = true AND c.price = 0) OR (:isFree = false AND c.price > 0)) AND "
+            + "(:level IS NULL OR LOWER(c.level) = LOWER(:level)) AND "
+            + "(:minNote IS NULL OR c.note >= :minNote) "
+            + "ORDER BY c.createdAt DESC")
+    List<Course> searchCoursesByDate(@Param("keyword") String keyword,
+            @Param("isFree") Boolean isFree,
+            @Param("level") String level,
+            @Param("minNote") Double minNote);
+
+// Ordenar por relevancia (nota descendente)
+    @Query("SELECT c FROM Course c WHERE "
+            + "(:keyword IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "
+            + "   OR LOWER(c.description) LIKE LOWER(CONCAT('%', :keyword, '%')) "
+            + "   OR LOWER(c.category.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND "
+            + "(:isFree IS NULL OR (:isFree = true AND c.price = 0) OR (:isFree = false AND c.price > 0)) AND "
+            + "(:level IS NULL OR LOWER(c.level) = LOWER(:level)) AND "
+            + "(:minNote IS NULL OR c.note >= :minNote) "
+            + "ORDER BY c.note DESC")
+    List<Course> searchCoursesByRelevance(@Param("keyword") String keyword,
+            @Param("isFree") Boolean isFree,
+            @Param("level") String level,
+            @Param("minNote") Double minNote);
+
 }
