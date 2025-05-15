@@ -64,14 +64,20 @@ public class CourseController {
         return ResponseEntity.ok(freeCourses);
     }
 
-    @GetMapping("/by-category")
-    public ResponseEntity<List<Course>> getCoursesByCategoryName(@RequestParam("categoryName") String categoryName) {
-        List<Course> courses = courseService.getCoursesByCategoryName(categoryName);
+    @GetMapping("/search")
+    public ResponseEntity<List<CourseDTO>> searchCourses(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "isFree", required = false) Boolean isFree,
+            @RequestParam(name = "level", required = false) String level,
+            @RequestParam(name = "minNote", required = false) Double minNote,
+            @RequestParam(name = "orderBy", defaultValue = "date") String orderBy) {
+
+        List<CourseDTO> courses = courseService.searchCoursesWithFilters(keyword, isFree, level, minNote, orderBy);
+
         if (courses.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(courses);
     }
-    
 
 }

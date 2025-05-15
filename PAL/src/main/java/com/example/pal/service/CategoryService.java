@@ -29,15 +29,15 @@ public class CategoryService {
 
     public List<CategoryDTO> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
-        return  categories.stream().map(category -> modelMapper.map(category, CategoryDTO.class)).collect(Collectors.toList());
+        return categories.stream().map(category -> modelMapper.map(category, CategoryDTO.class)).collect(Collectors.toList());
     }
 
     public Optional<Category> getCategoryById(Long id) {
-    	return categoryRepository.findById(id);
+        return categoryRepository.findById(id);
     }
 
     public Category updateCategory(Long id, Category categoryDetails) {
-        Category category = categoryRepository.findById(id).orElseThrow(()->new RuntimeException("Category not found!"));
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found!"));
         category.setName(categoryDetails.getName());
         return categoryRepository.save(category);
     }
@@ -49,4 +49,5 @@ public class CategoryService {
     public Optional<Category> getCategoryByName(String name) {
         return categoryRepository.findByName(name);
     }
+
 }

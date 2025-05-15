@@ -38,4 +38,10 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "instructor")
     List<Course> courses;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    List<Enrollment> enrollments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    List<Payment> payments;
 }
