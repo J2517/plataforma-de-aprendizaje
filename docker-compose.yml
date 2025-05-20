@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.3
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: paldb
+      MYSQL_USER: paluser
+      MYSQL_PASSWORD: palpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  pal-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pal-app
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/paldb
+      SPRING_DATASOURCE_USERNAME: paluser
+      SPRING_DATASOURCE_PASSWORD: palpass
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:

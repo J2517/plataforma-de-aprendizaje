@@ -1,0 +1,8 @@
+mediafiles
+*.jpg
+*.jpeg
+*.png
+*.git
+.vscode
+.idea
+*.iml
