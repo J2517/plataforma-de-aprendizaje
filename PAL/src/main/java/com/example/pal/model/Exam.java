@@ -4,14 +4,8 @@ import java.util.TreeMap;
 
 import com.example.pal.config.TreeMapConverter;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -24,6 +18,11 @@ public class Exam {
 
     @Column(nullable = false)
     private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    @JsonIgnore
+    private Course course;
 
     @Lob
     @Convert(converter = TreeMapConverter.class)
