@@ -1,11 +1,29 @@
 package com.example.pal.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.pal.dto.ExamSubmissionDTO;
+import com.example.pal.model.ExamAttempt;
+import com.example.pal.service.ExamAttemptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/exam/submit")
+@RequestMapping("/api/exams/")
 public class ExamAttemptController {
-    // TODO: Crear los endpoints para que un estudiante pueda 
-    //          intentar resolver un examen
+
+    @Autowired
+    ExamAttemptService examAttemptService;
+
+    @PostMapping("submit/{examId}")
+    public ResponseEntity<ExamAttempt> submitExam(@PathVariable("examId") Long examId, @RequestBody
+    ExamSubmissionDTO submission){
+        ExamAttempt examAttempt = examAttemptService.registerAttempt(submission, examId);
+        return ResponseEntity.status(202).body(examAttempt);
+    }
+
+    @GetMapping("results/{examId}")
+    public ResponseEntity<ExamAttempt> getResult(@PathVariable("examId") Long examId){
+        ExamAttempt examResult = (ExamAttempt) examAttemptService.getExamResult(examId);
+        return ResponseEntity.status(202).body(examResult);
+    }
 }
