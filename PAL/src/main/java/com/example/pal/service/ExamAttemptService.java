@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ExamAttemptService {
-    
+
     @Autowired
     private ExamAttemptRepository examAttemptRepository;
 
@@ -34,19 +34,19 @@ public class ExamAttemptService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private double calculateScore(TreeMap<Integer, String> submittedAnswers, TreeMap<Integer, String> correctAnswers){
-        if (submittedAnswers == null || correctAnswers == null || correctAnswers.isEmpty()){
+    private double calculateScore(TreeMap<Integer, String> submittedAnswers, TreeMap<Integer, String> correctAnswers) {
+        if (submittedAnswers == null || correctAnswers == null || correctAnswers.isEmpty()) {
             return 0.0;
         }
 
         int totalQuestions = correctAnswers.size();
         int correctCount = 0;
 
-        for(Integer questionNumber : correctAnswers.keySet()){
+        for (Integer questionNumber : correctAnswers.keySet()) {
             String correctAnswer = correctAnswers.get(questionNumber);
             String submittedAnswer = submittedAnswers.get(questionNumber);
 
-            if (correctAnswer != null && correctAnswer.equalsIgnoreCase(submittedAnswer)){
+            if (correctAnswer != null && correctAnswer.equalsIgnoreCase(submittedAnswer)) {
                 correctCount++;
             }
         }
@@ -54,7 +54,7 @@ public class ExamAttemptService {
         return (double) correctCount / totalQuestions * 100;
     }
 
-    public ExamAttempt registerAttempt(ExamSubmissionDTO submissionDTO, Long examId){
+    public ExamAttempt registerAttempt(ExamSubmissionDTO submissionDTO, Long examId) {
         User user = userRepository.findById(submissionDTO.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con id: " + submissionDTO.getUserId()));
 
@@ -76,10 +76,9 @@ public class ExamAttemptService {
         return examAttemptRepository.save(attempt);
     }
 
-    public List<ExamSubmissionDTO> getExamResult(Long examId) {
-        Optional<ExamAttempt> attemptsList = examAttemptRepository.findById(examId);
-        return attemptsList.stream().map(attempt->modelMapper.map(attempt, ExamSubmissionDTO.class)).collect(Collectors.toList());
+    public ExamAttempt getExamResult(Long examId, Long studentId) {
+        return examAttemptRepository.findTopByExamIdAndStudentIdOrderByScoreDesc(examId, studentId)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró intento para el examen con ID " + examId + " y el estudiante con ID " + studentId));
 
     }
-
 }

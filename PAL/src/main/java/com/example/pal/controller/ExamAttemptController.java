@@ -15,15 +15,15 @@ public class ExamAttemptController {
     ExamAttemptService examAttemptService;
 
     @PostMapping("submit/{examId}")
-    public ResponseEntity<ExamAttempt> submitExam(@PathVariable("examId") Long examId, @RequestBody
-    ExamSubmissionDTO submission){
+    public ResponseEntity<ExamAttempt> submitExam(@PathVariable("examId") Long examId, @RequestBody ExamSubmissionDTO submission) {
         ExamAttempt examAttempt = examAttemptService.registerAttempt(submission, examId);
         return ResponseEntity.status(202).body(examAttempt);
     }
 
-    @GetMapping("results/{examId}")
-    public ResponseEntity<ExamAttempt> getResult(@PathVariable("examId") Long examId){
-        ExamAttempt examResult = (ExamAttempt) examAttemptService.getExamResult(examId);
-        return ResponseEntity.status(202).body(examResult);
+    @GetMapping("results/{examId}/{studentId}")
+    public ResponseEntity<ExamAttempt> getResult(@PathVariable("examId") Long examId,
+            @PathVariable("studentId") Long studentId) {
+        ExamAttempt examResult = examAttemptService.getExamResult(examId, studentId);
+        return ResponseEntity.status(200).body(examResult);
     }
 }

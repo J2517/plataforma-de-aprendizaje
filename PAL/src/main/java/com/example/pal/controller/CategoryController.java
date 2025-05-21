@@ -56,14 +56,11 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    
-@GetMapping("/by-name/{name}")
-public ResponseEntity<Category> getCategoryByName(@PathVariable("name") String name) {
-    Optional<Category> category = categoryService.getCategoryByName(name);
-    return category.map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
-}
+    @GetMapping("/by-name/{name}")
+    public ResponseEntity<Category> getCategoryByName(@PathVariable("name") String name) {
+        Optional<Category> category = categoryService.getCategoryByName(name);
+        return category.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-    } 
-                
-                    
+}

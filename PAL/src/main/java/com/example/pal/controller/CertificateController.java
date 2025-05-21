@@ -19,13 +19,13 @@ public class CertificateController {
     private CertificateService certificateService;
 
     @PostMapping("/generate/{courseId}")
-    public ResponseEntity<Certificate> generateCertificate(@PathVariable Long courseId, @AuthenticationPrincipal User user) {
+    public ResponseEntity<Certificate> generateCertificate(@PathVariable("courseId") Long courseId, @AuthenticationPrincipal User user) {
         Certificate cert = certificateService.generateCertificate(courseId, user);
         return ResponseEntity.ok(cert);
     }
 
     @GetMapping("/download/{certificateId}")
-    public ResponseEntity<Resource> downloadCertificate(@PathVariable Long certificateId) {
+    public ResponseEntity<Resource> downloadCertificate(@PathVariable("certificateId") Long certificateId) {
         Resource file = (Resource) certificateService.downloadCertificate(certificateId);
 
         return ResponseEntity.ok()

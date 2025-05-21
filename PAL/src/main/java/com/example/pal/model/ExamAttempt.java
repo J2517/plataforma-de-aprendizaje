@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.TreeMap;
 
 import com.example.pal.config.TreeMapConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -30,10 +31,12 @@ public class ExamAttempt {
     private LocalDateTime attemptDate = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "exam_id", nullable = false)
     private Exam exam;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "student_id", nullable = false)
     private User student;
 
