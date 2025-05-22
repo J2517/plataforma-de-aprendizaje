@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.pal.dto.EnrollmentProgressDTO;
 import com.example.pal.model.Enrollment;
 import com.example.pal.repository.EnrollmentRepository;
 
@@ -23,7 +24,7 @@ public class ProgressController {
     private EnrollmentRepository enrollmentRepository;
 
     @GetMapping("/progress/{courseId}")
-    public ResponseEntity<FileSystemResource> getProgressReport(@PathVariable Long courseId) {
+    public List<EnrollmentProgressDTO> getProgressReport(@PathVariable Long courseId) {
         List<Enrollment> enrollments = enrollmentRepository.findAll();
 
         Random random = new Random();
@@ -41,7 +42,5 @@ public class ProgressController {
                     progress
             );
         }).collect(Collectors.toList());
-        
-        return ResponseEntity.ok(file);
     }
 }
