@@ -57,7 +57,8 @@ public class EnrollmentService {
         return enrollmentRepository.save(enrollment);
     }
 
-    public List<Enrollment> getCoursesByUser(Long userId) {
+    public List<Course> getCoursesByUser(Long userId) {
         return enrollmentRepository.findCoursesByUser(userId);
-    } 
+    }
+
 }

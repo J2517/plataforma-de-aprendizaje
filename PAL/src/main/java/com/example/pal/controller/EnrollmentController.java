@@ -31,8 +31,8 @@ public class EnrollmentController {
     }
 
     @GetMapping("/my-courses")
-    public ResponseEntity<List<Enrollment>> getCoursesByUser(@RequestParam("userId") Long userId) {
-        List<Enrollment> courses = enrollmentService.getCoursesByUser(userId);
+    public ResponseEntity<List<Course>> getCoursesByUser(@RequestParam("userId") Long userId) {
+        List<Course> courses = enrollmentService.getCoursesByUser(userId);
         return ResponseEntity.ok(courses);
     }
 
