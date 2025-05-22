@@ -7,12 +7,17 @@ import com.example.pal.model.User;
 import com.example.pal.repository.CertificateRepository;
 import com.example.pal.repository.ExamAttemptRepository;
 import com.example.pal.repository.ExamRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.example.pal.repository.UserRepository;
 
 @Service
 public class CertificateService {
@@ -29,12 +34,21 @@ public class CertificateService {
     @Autowired
     private PdfGenerator pdfGenerator;
 
-    public Certificate generateCertificate(Long courseId, User student) {
+    @Autowired
+    private UserRepository userRepository;
+
+    public Certificate generateCertificate(Long courseId, Long studentId) {
+        // Buscar al estudiante por su ID
+        User student = userRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException("Estudiante no encontrado con ID: " + studentId));
+
+        // Obtener todos los exámenes del curso
         List<Exam> exams = examRepository.findByCourseId(courseId);
 
+        // Validar que el estudiante ha aprobado todos los exámenes
         for (Exam exam : exams) {
             var attempt = attemptRepository.findTopByExamIdAndStudentIdOrderByScoreDesc(exam.getId(), student.getId());
-            if (attempt.isEmpty() || attempt.get().getScore() < 60) { // asumiendo 60 es mínimo aprobatorio
+            if (attempt.isEmpty() || attempt.get().getScore() < 60) { // Asumiendo que 60 es el mínimo aprobatorio
                 throw new IllegalArgumentException("El estudiante no ha aprobado todos los exámenes");
             }
         }
