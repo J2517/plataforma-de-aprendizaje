@@ -24,13 +24,13 @@ public class ProgressController {
     private EnrollmentRepository enrollmentRepository;
 
     @GetMapping("/progress/{courseId}")
-    public List<EnrollmentProgressDTO> getProgressReport(@PathVariable Long courseId) {
-        List<Enrollment> enrollments = enrollmentRepository.findAll();
+    public List<EnrollmentProgressDTO> getProgressReport(@PathVariable("courseId") Long courseId) {
+        List<Enrollment> enrollments = enrollmentRepository.findEnrollmentsByCourseId(courseId);
 
         Random random = new Random();
 
         return enrollments.stream().map(enrollment -> {
-            String studentName = enrollment.getUser().getName();
+            String studentName = enrollment.getUser().getUsername();
             String courseTitle = enrollment.getCourse().getTitle();
 
             int progress = random.nextInt(101);
